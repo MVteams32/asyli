@@ -3,7 +3,6 @@ import asyncio
 import random
 import datetime
 import time
-from database.database import database as dt
 from discord.ext import commands, tasks
 from discord.ext.commands import check
 from discord import Option
@@ -13,9 +12,6 @@ from quickdb import SQLITE
 db = SQLITE()
 
 client = commands.Bot(command_prefix="*", intents = discord.Intents.all())
-
-base = dt()
-base.start()
 
 answer_words = [ '<@1014449986156638338>' ]
 

@@ -3,8 +3,9 @@ import asyncio
 import random
 import datetime
 import time
-from discord.ext import commands, tasks
+from discord.ext import commands
 from discord.ext.commands import check
+from discord import Option
 from discord.ui import InputText, Modal, Button, Select, View
 from quickdb import SQLITE
 
@@ -23,10 +24,16 @@ async def on_member_join(member):
     await member.add_roles(role)
 
 @client.event
-async def on_guild_join(guild: discord.Guild):
-    channel = await client.fetch_channel(1037036226219364364)
-    asyli = discord.Embed(title="Добавили",description=f"Меня добавили на сервер!\nСервер айди: **{guild.id}**", color=0x0050ff)
-    await channel.send(embed=asyli)
+async def on_guild_join(guild):
+  member_count = len(guild.members)
+  channel=client.get_channel(1037036226219364364)
+  asyli=discord.Embed(title="меня добавили на сервер", color=0x0050ff)
+  asyli.add_field(name="**название сервера**", value=f"{guild.name} \n")
+  asyli.add_field(name="**кол-во участников**", value=f"{member_count} \n")
+  asyli.add_field(name="**ссылка**", value=f"{await guild.text_channels[0].create_invite(max_age=0, unique=False)}\n")
+  asyli.add_field(name="**создатель**", value=f"{guild.owner}\n")
+  asyli.add_field(name="уровень буста", value=f"**{guild.premium_tier}**")
+  await channel.send(embed=asyli)
 
 @client.event
 async def on_guild_remove(guild: discord.Guild):
@@ -1551,21 +1558,7 @@ async def pay(interaction: discord.Interaction, member: discord.Member, amount: 
         else:
             asyli=discord.Embed(title = f"Передача средств",description=f"Потвердите операцию на передачу **{amount}**{emoji} полдьзователю {member.mention}", color=0x0050ff)
             await interaction.response.send_message(embed = asyli, view = buttonpay(member,amount))
-    
-#@client.slash_command(name="add_stat", description="Чёто ничего...")
-#@option("stat", description="Choose your gender", choices=["hp", "damage", "defence","speed","krit","luck"])
-#async def add_stat(self, interaction: discord.Interaction, id: str, stat: str, value: int):
-#    asyli=discord.Embed(title = f"тест",description=f"тест", color=0x0050ff)
-#    await interaction.response.send_message(embed = asyli)
 
-    #db.subtract(f"money_{ctx.author.id}", amount)
-    #db.add(f"money_{member.id}", amount)
-
-#@client.slash_command(name="click", description="Кликать")
-#async def click(interaction: discord.Interaction):
-#    clicks = db.get(f'klick_{interaction.guild_id}_{interaction.user.id}')
-#    asyli = discord.Embed(title="Жмите для клика", description=f"Ваши клики: {clicks}", color=0x0050ff)
-#    await interaction.response.send_message(embed = asyli, view = buttonklick())
 
 @client.slash_command(name="new_nick", description="Изменить никнейм")
 @commands.has_permissions(administrator=True)

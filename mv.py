@@ -5,7 +5,6 @@ import datetime
 import time
 from discord.ext import commands, tasks
 from discord.ext.commands import check
-from discord import Option
 from discord.ui import InputText, Modal, Button, Select, View
 from quickdb import SQLITE
 
